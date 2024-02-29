@@ -119,13 +119,18 @@ def main():
             save_data(df)
             st.success("Medicamentos com quantidade zero foram excluídos com sucesso!")
 
-        remedio_para_excluir = st.text_input("Digite o nome do medicamento que deseja excluir:")
+        # Use a função autocomplete para fornecer sugestões
+        remedios_sugeridos = df["Remedio"].unique()
+        remedio_selecionado = st.autocomplete("Digite o nome do medicamento que deseja excluir:", remedios_sugeridos)
 
         if st.button("Excluir Medicamento"):
-            df = df[df["Remedio"] != remedio_para_excluir]
-            save_data(df)
-            st.success("Medicamento excluído com sucesso!")
-
+            if remedio_selecionado is not None:
+                df = df[df["Remedio"] != remedio_selecionado]
+                save_data(df)
+                st.success(f"Medicamento '{remedio_selecionado}' excluído com sucesso!")
+            else:
+                st.warning("Por favor, escolha um medicamento válido.")
+            
 if __name__ == "__main__":
     main()
 
