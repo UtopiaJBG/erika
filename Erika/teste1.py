@@ -73,8 +73,8 @@ def main():
             df.loc[indice_para_editar, "Quantia"] -= quantidade_utilizada
             save_data(df)
             st.success(f"{quantidade_utilizada} unidades do medicamento foram utilizadas com sucesso!")
-    else:
-        st.warning("Coluna 'Quantia' não encontrada. Certifique-se de que a estrutura do DataFrame está correta.")
+        else:
+            st.warning("Coluna 'Quantia' não encontrada. Certifique-se de que a estrutura do DataFrame está correta.")
 
     elif choice == "Visualizar Medicamentos":
         st.header("Visualizar Medicamentos")
