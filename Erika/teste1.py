@@ -118,10 +118,9 @@ def main():
             df = df[df["Quantia"] > 0]
             save_data(df)
             st.success("Medicamentos com quantidade zero foram excluídos com sucesso!")
-
         # Use a função autocomplete para fornecer sugestões
         remedios_sugeridos = df["Remedio"].unique()
-        remedio_selecionado = st.autocomplete("Digite o nome do medicamento que deseja excluir:", remedios_sugeridos)
+        remedio_selecionado = st.selectbox("Selecione o medicamento que deseja excluir:", remedios_sugeridos)
 
         if st.button("Excluir Medicamento"):
             if remedio_selecionado is not None:
