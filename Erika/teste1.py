@@ -27,15 +27,13 @@ def main():
         st.header("Adicionar Medicamento")
 
         remedio = st.text_input("Nome do Medicamento:")
-        # Use the get_current_date function to get the current date
         data_validade = st.date_input("Data de Validade:", value=get_current_date())
         quantia = st.number_input("Quantidade:", min_value=1, step=1)
 
         if st.button("Adicionar"):
-            # Concatenate medication name and current date in the "Remedio" field
             remedio_com_data = f"{remedio} - {get_current_date()}"
             novo_dado = {"Remedio": remedio_com_data, "Data de Validade": data_validade, "Quantia": quantia}
-            df = df.concat([novo_dado], ignore_index=True)
+            df = pd.concat([df, pd.DataFrame([novo_dado])], ignore_index=True)
             save_data(df)
             st.success("Medicamento adicionado com sucesso!")
     elif choice == "Editar Medicamento":
