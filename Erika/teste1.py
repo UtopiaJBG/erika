@@ -84,29 +84,29 @@ def main():
             st.write()
         else:
             st.warning("Nenhum medicamento cadastrado.")
-            
+
         if not df.empty:
-            # Adicione uma caixa de entrada de texto para buscar medicamentos enquanto o usuário digita
             busca_usuario = st.text_input("Digite o nome do medicamento para buscar:")
             medicamentos_filtrados = df[df["Remedio"].str.contains(busca_usuario, case=False, na=False)]
 
-            st.write(medicamentos_filtrados)
-
             if medicamentos_filtrados.empty:
                 st.warning("Nenhum medicamento encontrado com o nome digitado.")
+            else:
+                # Exibe medicamentos filtrados e formata as datas
+                st.write(medicamentos_filtrados.assign(**{"Data de Validade": medicamentos_filtrados["Data de Validade"].dt.strftime('%d-%m-%Y')}))
         else:
             st.warning("Nenhum medicamento cadastrado.")
 
-        # Filtrar Medicamentos por Data de Validade
         st.subheader("Filtrar Medicamentos por Data de Validade")
         data_inicio = st.date_input("Data Inicial:")
         data_fim = st.date_input("Data Final:")
 
-        # Converter a coluna "Data de Validade" para datetime
         df["Data de Validade"] = pd.to_datetime(df["Data de Validade"])
 
         medicamentos_filtrados = df[(df["Data de Validade"] >= pd.Timestamp(data_inicio)) & (df["Data de Validade"] <= pd.Timestamp(data_fim))]
-        st.write(medicamentos_filtrados)
+
+        # Exibe medicamentos filtrados e formata as datas
+        st.write(medicamentos_filtrados.assign(**{"Data de Validade": medicamentos_filtrados["Data de Validade"].dt.strftime('%d-%m-%Y')}))
 
     elif choice == "Excluir Medicamento":
         st.header("Excluir Medicamento")
