@@ -27,13 +27,13 @@ def main():
         st.header("Adicionar Medicamento")
 
         remedio = st.text_input("Nome do Medicamento:")
-        data_validade = st.date_input("Data de Validade:", value=get_current_date())
+        data_validade = st.date_input("Data de Validade:", value=get_current_date(), format="DD/MM/YYYY")
         quantia = st.number_input("Quantidade:", min_value=1, step=1)
 
         # Adiciona automaticamente a data de validade ao nome do medicamento
         remedio_com_data = f"{remedio} - {data_validade.strftime('%d-%m-%Y')}"  
         novo_dado = {"Remedio": remedio_com_data, "Data de Validade": data_validade, "Quantia": quantia}
-    
+
         if st.button("Adicionar"):
             df = pd.concat([df, pd.DataFrame([novo_dado])], ignore_index=True)
             save_data(df)
