@@ -31,7 +31,7 @@ def main():
         quantia = st.number_input("Quantidade:", min_value=1, step=1)
 
         # Adiciona automaticamente a data de validade ao nome do medicamento
-        remedio_com_data = f"{remedio} - {data_validade.strftime('%Y-%m-%d')}"  
+        remedio_com_data = f"{remedio} - {data_validade.strftime('%d-%m-%Y')}"  
         novo_dado = {"Remedio": remedio_com_data, "Data de Validade": data_validade, "Quantia": quantia}
     
         if st.button("Adicionar"):
