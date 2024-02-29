@@ -31,8 +31,7 @@ def main():
         quantia = st.number_input("Quantidade:", min_value=1, step=1)
 
         if st.button("Adicionar"):
-            remedio_com_data = f"{remedio} - {get_current_date()}"
-            novo_dado = {"Remedio": remedio_com_data, "Data de Validade": data_validade, "Quantia": quantia}
+            novo_dado = {"Remedio": remedio, "Data de Validade": data_validade, "Quantia": quantia}
             df = pd.concat([df, pd.DataFrame([novo_dado])], ignore_index=True)
             save_data(df)
             st.success("Medicamento adicionado com sucesso!")
@@ -64,12 +63,18 @@ def main():
 
         if st.button("Atualizar Quantidade Utilizada"):
             if not indice_para_editar.empty:
-                df.loc[indice_para_editar, "Quantia Utilizada"] += quantidade_utilizada
+                if "Quantia Utilizada" not in df.columns:
+                    df["Quantia Utilizada"] = 0  # Adiciona a coluna se ainda não existir
+                    df.loc[indice_para_editar, "Quantia Utilizada"] += quantidade_utilizada
+        
+            # Verifica se a coluna "Quantia" existe antes de tentar atualizar
+            if "Quantia" in df.columns:
                 df.loc[indice_para_editar, "Quantia"] -= quantidade_utilizada
                 save_data(df)
                 st.success(f"{quantidade_utilizada} unidades do medicamento foram utilizadas com sucesso!")
-            else:
-                st.warning("Medicamento não encontrado. Certifique-se de escolher um medicamento válido.")
+        else:
+            st.warning("Coluna 'Quantia' não encontrada. Certifique-se de que a estrutura do DataFrame está correta.")
+       
     elif choice == "Visualizar Medicamentos":
         st.header("Visualizar Medicamentos")
 
