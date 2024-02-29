@@ -111,8 +111,7 @@ def main():
     elif choice == "Excluir Medicamento":
         st.header("Excluir Medicamento")
 
-        if st.checkbox("Mostrar Medicamentos"):
-            st.write(df)
+        st.write(df)
 
         # Adicione um botão para excluir todos os medicamentos com quantidade zero
         if st.button("Excluir Medicamentos com Quantidade 0"):
