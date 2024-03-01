@@ -107,8 +107,12 @@ def main():
 
     elif choice == "Excluir Medicamento":
         st.header("Excluir Medicamento")
-        df["Data de Validade"] = pd.to_datetime(df["Data de Validade"].dt.strftime('%d-%m-%Y'))
-        st.write(df)
+        df["Data de Validade"] = pd.to_datetime(df["Data de Validade"], errors='coerce')
+        if "Data de Validade" in df.columns and pd.api.types.is_datetime64_any_dtype(df["Data de Validade"]):
+            df["Data de Validade"] = df["Data de Validade"].dt.strftime('%d-%m-%Y')
+            st.write(df)
+        else:
+            st.warning("A coluna 'Data de Validade' não foi convertida corretamente para datetime.")
 
         if st.button("Excluir Medicamentos com Quantidade 0"):
             df = df[df["Quantia"] > 0]
