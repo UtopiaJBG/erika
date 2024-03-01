@@ -96,8 +96,8 @@ def main():
             st.warning("Nenhum medicamento cadastrado.")
 
         st.subheader("Filtrar Medicamentos por Data de Validade")
-        data_inicio = st.date_input("Data Inicial:")
-        data_fim = st.date_input("Data Final:")
+        data_inicio = st.date_input("Data Inicial:").dt.strftime('%d-%m-%Y')
+        data_fim = st.date_input("Data Final:").dt.strftime('%d-%m-%Y')
 
         df["Data de Validade"] = pd.to_datetime(df["Data de Validade"])
 
