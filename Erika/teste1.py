@@ -99,7 +99,7 @@ def main():
                 medicamentos_filtrados["Data de Validade"] = pd.to_datetime(medicamentos_filtrados["Data de Validade"])
 
                 # Exibe medicamentos filtrados e formata as datas
-                st.write(medicamentos_filtrados.assign(**{"Data de Validade": medicamentos_filtrados["Data de Validade"].dt.strftime('%d-%m-%Y')}))
+                st.write(medicamentos_filtrados.assign(**{"Data de Validade": medicamentos_filtrados["Data de Validade"]}))
         else:
             st.warning("Nenhum medicamento cadastrado.")
 
@@ -112,7 +112,7 @@ def main():
         medicamentos_filtrados = df[(df["Data de Validade"] >= pd.Timestamp(data_inicio)) & (df["Data de Validade"] <= pd.Timestamp(data_fim))]
 
         # Exibe medicamentos filtrados e formata as datas
-        st.write(medicamentos_filtrados.assign(**{"Data de Validade": medicamentos_filtrados["Data de Validade"].dt.strftime('%d-%m-%Y')}))
+        st.write(medicamentos_filtrados.assign(**{"Data de Validade": medicamentos_filtrados["Data de Validade"]}))
 
     elif choice == "Excluir Medicamento":
         st.header("Excluir Medicamento")
