@@ -48,7 +48,7 @@ def main():
         medicamentos_filtrados_editar = df[df["Remedio"].str.contains(busca_medicamento_editar, case=False, na=False)]
 
         if not medicamentos_filtrados_editar.empty:
-            st.write(medicamentos_filtrados_editar)
+            st.write(medicamentos_filtrados_editar.dt.strftime('%d-%m-%Y'))
         else:
             st.warning("Nenhum medicamento encontrado com o nome digitado.")
 
