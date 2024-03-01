@@ -3,82 +3,80 @@ import pandas as pd
 from datetime import datetime  # Import datetime module
 
 def load_data():
-  try:
-    df = pd.read_csv("planilha.csv")
-  except FileNotFoundError:
-    df = pd.DataFrame(columns=["Remedio", "Data de Validade", "Quantia"])
-  return df
+    try:
+        df = pd.read_csv("planilha.csv")
+    except FileNotFoundError:
+        df = pd.DataFrame(columns=["Remedio", "Data de Validade", "Quantia"])
+    return df
 
 def save_data(df):
-  df.to_csv("planilha.csv", index=False)
+    df.to_csv("planilha.csv", index=False)
 
 def get_current_date():
-  return datetime.now().date().strftime("%d/%m/%Y")
+    return datetime.now().date()  # Get current date
 
 def main():
-  st.title("Gestão de Medicamentos")
+    st.title("Gestão de Medicamentos")
 
-  df = load_data()
+    df = load_data()
 
-  menu = ["Adicionar Medicamento", "Editar Medicamento", "Excluir Medicamento", "Visualizar Medicamentos"]
-  choice = st.sidebar.selectbox("Selecione uma opção:", menu)
+    menu = ["Adicionar Medicamento", "Editar Medicamento", "Excluir Medicamento", "Visualizar Medicamentos"]
+    choice = st.sidebar.selectbox("Selecione uma opção:", menu)
 
-  if choice == "Adicionar Medicamento":
-    st.header("Adicionar Medicamento")
+    if choice == "Adicionar Medicamento":
+        st.header("Adicionar Medicamento")
 
-    remedio = st.text_input("Nome do Medicamento:")
-    data_validade = st.date_input("Data de Validade:", value=get_current_date())
-    quantia = st.number_input("Quantidade:", min_value=1, step=1)
+        remedio = st.text_input("Nome do Medicamento:")
+        data_validade = st.date_input("Data de Validade:", value=get_current_date(), format="DD/MM/YYYY")
+        quantia = st.number_input("Quantidade:", min_value=1, step=1)
 
-    # Adiciona automaticamente a data de validade ao nome do medicamento
-    remedio_com_data = f"{remedio} - {data_validade.strftime('%d-%m-%Y')}"
-    novo_dado = {"Remedio": remedio_com_data, "Data de Validade": data_validade, "Quantia": quantia}
+        # Adiciona automaticamente a data de validade ao nome do medicamento
+        remedio_com_data = f"{remedio} - {data_validade.strftime('%d-%m-%Y')}"  
+        novo_dado = {"Remedio": remedio_com_data, "Data de Validade": data_validade, "Quantia": quantia}
 
-    if st.button("Adicionar"):
-      df = pd.concat([df, pd.DataFrame([novo_dado])], ignore_index=True)
-      save_data(df)
-      st.success("Medicamento adicionado com sucesso!")
+        if st.button("Adicionar"):
+            df = pd.concat([df, pd.DataFrame([novo_dado])], ignore_index=True)
+            save_data(df)
+            st.success("Medicamento adicionado com sucesso!")
+    elif choice == "Editar Medicamento":
+        st.header("Editar Medicamento")
 
-  elif choice == "Editar Medicamento":
-    st.header("Editar Medicamento")
+        if st.checkbox("Mostrar Medicamentos"):
+            st.write(df)
 
-    if st.checkbox("Mostrar Medicamentos"):
-      st.write(df)
+        busca_medicamento_editar = st.text_input("Digite o nome do medicamento que deseja editar:")
+        medicamentos_filtrados_editar = df[df["Remedio"].str.contains(busca_medicamento_editar, case=False, na=False)]
 
-    busca_medicamento_editar = st.text_input("Digite o nome do medicamento que deseja editar:")
-    medicamentos_filtrados_editar = df[df["Remedio"].str.contains(busca_medicamento_editar, case=False, na=False)]
-
-    if not medicamentos_filtrados_editar.empty:
-      st.write(medicamentos_filtrados_editar)
-    else:
-      st.warning("Nenhum medicamento encontrado com o nome digitado.")
-
-    remedio_para_editar = st.selectbox("Escolha o medicamento para editar:", medicamentos_filtrados_editar["Remedio"].unique(), key="editar_medicamento")
-    indice_para_editar = df[df["Remedio"] == remedio_para_editar].index
-
-    if st.button("Mostrar Detalhes do Medicamento"):
-      if not indice_para_editar.empty:
-        detalhes = df.loc[indice_para_editar]
-        st.write(detalhes)
-      else:
-        st.warning("Medicamento não encontrado. Certifique-se de escolher um medicamento válido.")
-
-    quantidade_utilizada = st.number_input("Quantidade Utilizada:", min_value=0, step=1)
-
-    if st.button("Atualizar Quantidade Utilizada"):
-      if not indice_para_editar.empty:
-        if "Quantia Utilizada" not in df.columns:
-          df["Quantia Utilizada"] = 0  # Adiciona a coluna se ainda não existir
-          df.loc[indice_para_editar, "Quantia Utilizada"] += quantidade_utilizada
-
-        # Verifica se a coluna "Quantia" existe antes de tentar atualizar
-        if "Quantia" in df.columns:
-          df.loc[indice_para_editar, "Quantia"] -= quantidade_utilizada
-          save_data(df)
-          st.success(f"{quantidade_utilizada} unidades do medicamento foram utilizadas com sucesso!")
+        if not medicamentos_filtrados_editar.empty:
+            st.write(medicamentos_filtrados_editar)
         else:
-          st.warning("Coluna 'Quantia' não encontrada. Certifique-se de que a estrutura do DataFrame está correta.")
+            st.warning("Nenhum medicamento encontrado com o nome digitado.")
 
+        remedio_para_editar = st.selectbox("Escolha o medicamento para editar:", medicamentos_filtrados_editar["Remedio"].unique(), key="editar_medicamento")
+        indice_para_editar = df[df["Remedio"] == remedio_para_editar].index
+
+        if st.button("Mostrar Detalhes do Medicamento"):
+            if not indice_para_editar.empty:
+                detalhes = df.loc[indice_para_editar]
+                st.write(detalhes)
+            else:
+                st.warning("Medicamento não encontrado. Certifique-se de escolher um medicamento válido.")
+
+        quantidade_utilizada = st.number_input("Quantidade Utilizada:", min_value=0, step=1)
+
+        if st.button("Atualizar Quantidade Utilizada"):
+            if not indice_para_editar.empty:
+                if "Quantia Utilizada" not in df.columns:
+                    df["Quantia Utilizada"] = 0  # Adiciona a coluna se ainda não existir
+                    df.loc[indice_para_editar, "Quantia Utilizada"] += quantidade_utilizada
+        
+            # Verifica se a coluna "Quantia" existe antes de tentar atualizar
+            if "Quantia" in df.columns:
+                df.loc[indice_para_editar, "Quantia"] -= quantidade_utilizada
+                save_data(df)
+                st.success(f"{quantidade_utilizada} unidades do medicamento foram utilizadas com sucesso!")
+        else:
+            st.warning("Coluna 'Quantia' não encontrada. Certifique-se de que a estrutura do DataFrame está correta.")
     elif choice == "Visualizar Medicamentos":
         st.header("Visualizar Medicamentos")
 
@@ -137,4 +135,3 @@ def main():
             
 if __name__ == "__main__":
     main()
-
