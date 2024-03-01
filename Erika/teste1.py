@@ -107,9 +107,7 @@ def main():
 
     elif choice == "Excluir Medicamento":
         st.header("Excluir Medicamento")
-        df["Data de Validade"] = pd.to_datetime(df["Data de Validade"])
-
-
+        df["Data de Validade"] = pd.to_datetime(df["Data de Validade"].dt.strftime('%d-%m-%Y'))
         st.write(df)
 
         if st.button("Excluir Medicamentos com Quantidade 0"):
