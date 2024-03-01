@@ -27,7 +27,7 @@ def main():
         st.header("Adicionar Medicamento")
 
         remedio = st.text_input("Nome do Medicamento:")
-        data_validade = st.date_input("Data de Validade:", value=get_current_date(), format="DD/MM/YYYY")
+        data_validade = st.date_input("Data de Validade:", value=get_current_date())
         quantia = st.number_input("Quantidade:", min_value=1, step=1)
 
         # Adiciona automaticamente a data de validade ao nome do medicamento
