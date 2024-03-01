@@ -1,7 +1,6 @@
 import streamlit as st
 import pandas as pd
-from datetime import datetime  # Import datetime module
-
+from datetime import datetime  
 def load_data():
     try:
         df = pd.read_csv("planilha.csv")
@@ -13,7 +12,7 @@ def save_data(df):
     df.to_csv("planilha.csv", index=False)
 
 def get_current_date():
-    return datetime.now().date()  # Get current date
+    return datetime.now().date()  
 
 def main():
     st.title("Gestão de Medicamentos")
@@ -30,7 +29,6 @@ def main():
         data_validade = st.date_input("Data de Validade:", value=get_current_date(), format="DD/MM/YYYY")
         quantia = st.number_input("Quantidade:", min_value=1, step=1)
 
-        # Adiciona automaticamente a data de validade ao nome do medicamento
         remedio_com_data = f"{remedio} - {data_validade.strftime('%d-%m-%Y')}"  
         novo_dado = {"Remedio": remedio_com_data, "Data de Validade": data_validade, "Quantia": quantia}
 
@@ -70,7 +68,6 @@ def main():
                     df["Quantia Utilizada"] = 0  # Adiciona a coluna se ainda não existir
                     df.loc[indice_para_editar, "Quantia Utilizada"] += quantidade_utilizada
         
-            # Verifica se a coluna "Quantia" existe antes de tentar atualizar
             if "Quantia" in df.columns:
                 df.loc[indice_para_editar, "Quantia"] -= quantidade_utilizada
                 save_data(df)
@@ -92,10 +89,8 @@ def main():
             if medicamentos_filtrados.empty:
                 st.warning("Nenhum medicamento encontrado com o nome digitado.")
             else:
-                # Garanta que a coluna "Data de Validade" seja do tipo datetime
                 medicamentos_filtrados["Data de Validade"] = pd.to_datetime(medicamentos_filtrados["Data de Validade"])
 
-                # Exibe medicamentos filtrados e formata as datas
                 st.write(medicamentos_filtrados.assign(**{"Data de Validade": medicamentos_filtrados["Data de Validade"].dt.strftime('%d-%m-%Y')}))
         else:
             st.warning("Nenhum medicamento cadastrado.")
@@ -108,20 +103,19 @@ def main():
 
         medicamentos_filtrados = df[(df["Data de Validade"] >= pd.Timestamp(data_inicio)) & (df["Data de Validade"] <= pd.Timestamp(data_fim))]
 
-        # Exibe medicamentos filtrados e formata as datas
         st.write(medicamentos_filtrados.assign(**{"Data de Validade": medicamentos_filtrados["Data de Validade"].dt.strftime('%d-%m-%Y')}))
 
     elif choice == "Excluir Medicamento":
         st.header("Excluir Medicamento")
+        df["Data de Validade"] = pd.to_datetime(df["Data de Validade"])
+
 
         st.write(df)
 
-        # Adicione um botão para excluir todos os medicamentos com quantidade zero
         if st.button("Excluir Medicamentos com Quantidade 0"):
             df = df[df["Quantia"] > 0]
             save_data(df)
             st.success("Medicamentos com quantidade zero foram excluídos com sucesso!")
-        # Use a função autocomplete para fornecer sugestões
         remedios_sugeridos = df["Remedio"].unique()
         remedio_selecionado = st.selectbox("Selecione o medicamento que deseja excluir:", remedios_sugeridos)
 
