@@ -6,7 +6,9 @@ def load_data():
     try:
         df = pd.read_csv("planilha.csv")
     except FileNotFoundError:
-        df = pd.DataFrame(columns=["Remedio", "Data de Validade", "Quantia"])
+        df = pd.DataFrame(columns=["Remedio", "Data de Validade", "Quantia"].dt.strftime("%d/%m/%Y"))
+
+        
     return df
 
 def save_data(df):
