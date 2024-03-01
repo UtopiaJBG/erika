@@ -13,7 +13,7 @@ def save_data(df):
     df.to_csv("planilha.csv", index=False)
 
 def get_current_date():
-    return datetime.now().date()  # Get current date
+  return datetime.now().date().strftime("%d/%m/%Y")
 
 def main():
     st.title("Gestão de Medicamentos")
