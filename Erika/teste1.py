@@ -107,6 +107,7 @@ def main():
         data_inicio = st.date_input("Data Inicial:")
         data_fim = st.date_input("Data Final:")
 
+        df["Data de Validade"] = pd.to_datetime(df["Data de Validade"])
 
         medicamentos_filtrados = df[(df["Data de Validade"] >= pd.Timestamp(data_inicio)) & (df["Data de Validade"] <= pd.Timestamp(data_fim))]
 
