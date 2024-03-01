@@ -76,7 +76,7 @@ def main():
                 save_data(df)
                 st.success(f"{quantidade_utilizada} unidades do medicamento foram utilizadas com sucesso!")
         else:
-            st.warning("Coluna 'Quantia' não encontrada. Certifique-se de que a estrutura do DataFrame está correta.")
+            st.write()
     elif choice == "Visualizar Medicamentos":
         st.header("Visualizar Medicamentos")
 
