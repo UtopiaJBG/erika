@@ -96,7 +96,7 @@ def main():
                 st.warning("Nenhum medicamento encontrado com o nome digitado.")
             else:
                 # Garanta que a coluna "Data de Validade" seja do tipo datetime
-                medicamentos_filtrados["Data de Validade"] = pd.to_datetime(medicamentos_filtrados["Data de Validade"])
+                medicamentos_filtrados["Data de Validade"] = (medicamentos_filtrados["Data de Validade"])
 
                 # Exibe medicamentos filtrados e formata as datas
                 st.write(medicamentos_filtrados.assign(**{"Data de Validade": medicamentos_filtrados["Data de Validade"]}))
